@@ -1,0 +1,44 @@
+<!doctype html>
+<title>Desi Elections Betting Pool</title>
+ <form action="/logout" method="post">
+     <p><input type=submit value=Logout>
+</form>
+  <h3>Hello {{ name }}! Man up and bet on something !!!!</h3>
+
+{% for bet_info in all_bets %}
+<hr/>
+<h3>Bet is {{ bet_info['name'] }}  </h3>
+{% if bet_info['pic'] %}
+<img src="{{ bet_info['pic'] }}" alt="{{ bet_info['name'] }}" height="200" width="200"><br/>
+{% endif %}
+<table border="1">
+	<tr>
+{% for bet_option in get_bet_options_cb(bet_info['bet_id']).keys() %}
+		<td width="180">{{ bet_option[1] }} <br/> {{' (Bets worth $' + bet_option[2] +')' }}</td>
+{% endfor %}
+	</tr>
+	<tr>
+{% for bet_option in get_bet_options_cb(bet_info['bet_id']).items() %}
+	<td width="180">
+	{% for betting_user in bet_option[1] %}
+			<br/>{{ betting_user }}
+	{% endfor %}
+	</td>
+{% endfor %}
+	</tr>
+	<tr>
+{% for bet_option in get_bet_options_cb(bet_info['bet_id']).items() %}
+	<td width="180">
+		<form action="/addusertobet" method="post">
+		<input type="hidden" name="bet_id" value="{{ bet_info['bet_id'] }}">
+		<input type="hidden" name="user_id" value="{{ user_id }}">
+		<input type="hidden" name="bet_opt_id" value="{{ bet_option[0][0] }}">
+		<p><p>Bet Amount:<input type=text name=amount>
+            	<p><input type=submit value='M betting on this!!'>
+        	</form>
+	</td>
+{% endfor %}
+	</tr>
+</table>
+{% endfor %}
+<hr/>
