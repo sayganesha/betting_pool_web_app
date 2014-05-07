@@ -15,3 +15,14 @@ Since I think Python is a faily good programming language
 masked as a scripting language, Flask looks like a good
 candidate. (Another option I considered was Bottle).
 
+Pre-requisites
+==============
+Since this uses Flask web development toolkit, please
+install Flask on your system.
+(Find how to install it at : http://flask.pocoo.org/docs/installation )
+
+Configuration Files
+===================
+Configure your application using the config file picked up
+from the environment variable BETTING_APP_CFG_FILE .
+The sample config file to use is config/settings.cfg
