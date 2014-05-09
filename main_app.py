@@ -136,7 +136,7 @@ def addbet():
     if request.method == 'POST':
 	# Register the user if not already there
 	username = session['username']
-	if username != app.config['ADMIN_USERNAME']:
+	if app.config['ADMIN_USERNAME'].find(username) == -1:
 		return 'Unauthorized user'
 	add_bet_info(request.form['betname'],
 		     (request.form['opt_1'], request.form['opt_2'],
@@ -196,10 +196,11 @@ def addusertobet():
                      '(select bet_opt_id from bet_options where bet_id="%s")'\
                      % (user_id, bet_id))
  
-    # Now add his new bet 
-    cur = db.execute('insert into user_bets(user_id, bet_opt_id, amount)'\
-                     ' values("%s", "%s", "%s")' \
-                     % (user_id, bet_opt_id, amount))
+    if int(amount) > 0:
+        # Now add his new bet 
+        cur = db.execute('insert into user_bets(user_id, bet_opt_id, amount)'\
+                        ' values("%s", "%s", "%s")' \
+                        % (user_id, bet_opt_id, amount))
 
     # First remove all bets this user has for this bet
     db.commit()
@@ -211,10 +212,22 @@ def index():
 	db = get_db()
 	cur = db.execute('select * from bet_info')
 	bets = cur.fetchall()
+        user_id = session['user_id']
+        cur = db.execute('select sum(amount) from user_bets where user_id="%s"'\
+                         % (user_id))
+        amt_rows = cur.fetchone()
+        if not amt_rows[0]:
+            amt_remaining = app.config['MAX_SPEND_AMT']
+        else:
+            amt_remaining = app.config['MAX_SPEND_AMT'] - amt_rows[0]
+
         return render_template('main.html',
+                               is_admin = (app.config['ADMIN_USERNAME'].find(session['username']) != -1),
 			       name = session['username'],
 			       user_id = session['user_id'],
 			       all_bets = bets,
+                               max_amt = app.config['MAX_SPEND_AMT'],
+                               amt_spent = amt_remaining,
 			       get_bet_options_cb = get_bet_options)
     return 'Welcome to the %s Betting Pool !!<br/>'\
 	   '<a href="/login">Login</a> and start betting or'\
@@ -269,4 +282,4 @@ def logout():
 
 if __name__ == '__main__':
 	setup_env()
-	app.run()
+	app.run(host = app.config['HOST_IP_ADDR'], port = app.config['HOST_IP_PORT'])

@@ -3,7 +3,18 @@
  <form action="/logout" method="post">
      <p><input type=submit value=Logout>
 </form>
+{% if is_admin %}
+ <form action="/addbet" method="get">
+     <p><input type=submit value='Add a new Bet'>
+</form>
+{% endif %}
+
   <h3>Hello {{ name }}! Man up and bet on something !!!!</h3>
+<p>Rules:
+<p>You have maximum $ {{ max_amt }} to bet with, you still have $ {{ amt_spent }} to bet with !!
+<p>You can bet by simply adding a number to the betting amount and click the button.
+<p>You can keep changing the bets till the last day.
+<p>To remove your bet just add the amount as zero.
 
 {% for bet_info in all_bets %}
 <hr/>
