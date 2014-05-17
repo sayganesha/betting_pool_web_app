@@ -3,6 +3,9 @@
  <form action="/logout" method="post">
      <p><input type=submit value=Logout>
 </form>
+ <form action="/user_standings" method="get">
+     <p><input type=submit value="Winners Page">
+</form>
 {% if is_admin %}
  <form action="/addbet" method="get">
      <p><input type=submit value='Add a new Bet'>
@@ -44,8 +47,8 @@
 		<input type="hidden" name="bet_id" value="{{ bet_info['bet_id'] }}">
 		<input type="hidden" name="user_id" value="{{ user_id }}">
 		<input type="hidden" name="bet_opt_id" value="{{ bet_option[0][0] }}">
-		<p><p>Bet Amount:<input type=text name=amount>
-            	<p><input type=submit value='M betting on this!!'>
+		<p><p>Bet Amount:<input type=text name=amount disabled>
+            	<p><input type=submit value='M betting on this!!' disabled>
         	</form>
 	</td>
 {% endfor %}

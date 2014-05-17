@@ -16,7 +16,8 @@ drop table if exists bet_options;
 create table bet_options (
 	bet_opt_id integer primary key autoincrement,
 	bet_id integer not null,
-	name text not null
+	name text not null,
+        winning_bet integer
 );
 
 drop table if exists user_bets;

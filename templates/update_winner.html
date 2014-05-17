@@ -1,0 +1,45 @@
+<!doctype html>
+<title>Desi Elections Betting Pool</title>
+ <form action="/logout" method="post">
+     <p><input type=submit value=Logout>
+</form>
+ <form action="/">
+     <p><input type=submit value="My bets">
+</form>
+{% if is_admin %}
+ <form action="/addbet" method="get">
+     <p><input type=submit value='Add a new Bet'>
+</form>
+{% endif %}
+
+  <h3>Update Information about winning bets</h3>
+
+{% for bet_info in bets_info_table.items() %}
+<hr/>
+<h3>Bet is :"{{ bet_info[0][1] }}"  </h3>
+<table border="1">
+    <tr>
+    {% for bet_option in bet_info[1] %}
+	    <td width="180">
+                {{ bet_option[1] }} <br/> 
+                {% if bet_option[2] == 0 %}
+                <b><font color="red">Winner!</font></b>
+                {% endif %}
+            </td>
+    {% endfor %}
+    </tr>
+
+    <tr>
+    
+    {% for bet_option in bet_info[1] %}
+        <td width="180">
+                <form action="/addwinningbet" method="post">
+                <input type="hidden" name="bet_opt_id" value="{{  bet_option[0] }}">
+                <p><input type=submit value='Update me as winning bet!!'>
+                </form>
+        </td>
+    {% endfor %}
+    </tr>
+</table>
+{% endfor %}
+<hr/>
